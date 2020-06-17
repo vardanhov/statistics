@@ -76,4 +76,6 @@ public class Visit {
     public void setPage(Page page) {
         this.page = page;
     }
+
+
 }

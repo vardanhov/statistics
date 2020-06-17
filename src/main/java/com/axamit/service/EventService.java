@@ -56,14 +56,28 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public ResponseForPeriod getDataForPeriod(final Date from, final Date to) {
-
+        int uniqueUsersCount;
         List<Visit> visits = visitRepository.findVisitsForPeriod(from, to);
         Set<String> uniqueUsers = visits.stream()
                 .map(a -> a.getUser().getId())
                 .collect(Collectors.toSet());
-        List<User> users =visits.forEach(a->a.);
-        ResponseForPeriod responseStatisticsForPeriod = new ResponseForPeriod(visits.size(),uniqueUsers.size());
-        return responseStatisticsForPeriod;
+        if(uniqueUsers.isEmpty())
+            uniqueUsersCount=0;
+        Set<User> setUser = new HashSet<>();
+        for(Visit visit : visits){
+            setUser.add(visit.getUser());
+        }
+        int count = 0;
+        Set<Long> setPageId = new HashSet<>();
+
+        for (User user : setUser){
+            for(Visit visitChek : user.getVisits()){
+                setPageId.add(visitChek.getPage().getId());
+            }
+            if(setPageId.size() > 10 ) count++;
+        }
+
+        return new ResponseForPeriod(visits.size(),uniqueUsers.size(),count);
 
     }
 

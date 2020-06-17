@@ -4,6 +4,7 @@ package com.axamit.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -15,6 +16,9 @@ public class User {
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
 
+    @OneToMany(mappedBy = "user")
+    private List<Visit> visits;
+
 
     public User() {
     }
@@ -22,6 +26,11 @@ public class User {
     public User(String id) {
         this.id = id;
 
+    }
+
+    public User(String id, List<Visit> visits) {
+        this.id = id;
+        this.visits = visits;
     }
 
     public String getId() {
@@ -32,4 +41,11 @@ public class User {
         this.id = id;
     }
 
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
+    }
 }
